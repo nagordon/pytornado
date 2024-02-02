@@ -37,6 +37,7 @@
 :: |   - See also https://stackoverflow.com/a/44339624
 
 :: Turn off command echoing feature
-@echo off
-
-_pytornado_exe.py %*
+:: set mypath=%cd%
+:: set file1=\units.py
+:: set "filepath=%mypath%%file1%"
+@python.exe %~dp0\_pytornado_exe.py %*

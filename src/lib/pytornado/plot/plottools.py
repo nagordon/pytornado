@@ -263,7 +263,7 @@ def _init_plot3d(title=''):
     """
 
     figure_3d = plt.figure(figsize=(12, 12), edgecolor=C.BLACK)
-    axes_3d = figure_3d.gca(projection='3d')
+    axes_3d = figure_3d.add_subplot(121, projection='3d')
 
     # --> Matplotlib version 3.1.1 raises NotImplementedError
     # --> See: https://github.com/matplotlib/matplotlib/issues/1077
@@ -680,6 +680,8 @@ def add_results(axes_2d, axes_3d, figure_3d, vlmdata, lattice, aircraft, key):
         :key: Property to plot
     """
 
+    from matplotlib import cm
+
     axes_yz, axes_xz, axes_xy = axes_2d
 
     # Normalise to range [0, 1]
@@ -695,14 +697,15 @@ def add_results(axes_2d, axes_3d, figure_3d, vlmdata, lattice, aircraft, key):
         points_p = np.array([pp[0], pp[1], pp[2], pp[3], pp[0]])
 
         XS, YS, ZS = interpolate_quad(points_p[0], points_p[1], points_p[2], points_p[3], size=aircraft.size)
-        axes_3d.plot_surface(XS, YS, ZS, color=color, linewidth=PS.LINEWIDTH_a, shade=False, cstride=1, rstride=1)
+        plt1 = axes_3d.plot_surface(XS, YS, ZS, color=color, linewidth=PS.LINEWIDTH_a, shade=False, cstride=1, rstride=1)
         axes_yz.fill(YS, ZS, color=color, facecolor=color, fill=True)
         axes_xz.fill(XS, ZS, color=color, facecolor=color, fill=True)
         axes_xy.fill(XS, YS, color=color, facecolor=color, fill=True)
 
     cbar = cm.ScalarMappable(cmap=C.COLORMAP)
     cbar.set_array(vlmdata.panelwise[key])
-    cb = figure_3d.colorbar(cbar)
+    # cb = figure_3d.colorbar(cbar)
+    cb = figure_3d.colorbar(plt1)
     cb.set_label(key)
 
 
